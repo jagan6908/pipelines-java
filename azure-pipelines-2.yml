@@ -1,0 +1,27 @@
+# Maven
+# Build your Java project and run tests with Apache Maven.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- main
+
+# .gitlab-ci.yml
+
+stages:
+  - install
+
+variables:
+  MAVEN_VERSION: "3.8.4"
+  MAVEN_HOME: "/usr/local/apache-maven-$MAVEN_VERSION"
+
+  install:
+  stage: install
+  image: ubuntu:latest
+  script:
+    - apt-get update -y
+    - apt-get install -y curl
+    - curl -fsSL https://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz -o /tmp/maven.tar.gz
+    - tar -xf /tmp/maven.tar.gz -C /usr/local/
+    - ln -s $MAVEN_HOME/bin/mvn /usr/local/bin/mvn
+    - mvn --version
